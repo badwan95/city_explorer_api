@@ -25,14 +25,20 @@ app.get('/weather',(request,response)=>{
     let dataInside = weatherData.data;
     let weatherArray = [];
     let city = request.query.city;
-    dataInside.forEach(value =>{
-        let newWeather = new Weather(value);
-        let newTime = new Date(newWeather.time).toString().split(' ');
-        let createTime = `${newTime[0]} ${newTime[1]} ${newTime[2]} ${newTime[3]}`;
-        newWeather.time = createTime;
-        weatherArray.push(newWeather);
-    })
-    console.log(weatherArray)
+    for (let i=0;i<8;i++){
+      let newWeather = new Weather(dataInside[i]);
+      let newTime = new Date(newWeather.time).toString().split(' ');
+      let createTime = `${newTime[0]} ${newTime[1]} ${newTime[2]} ${newTime[3]}`;
+      newWeather.time = createTime;
+      weatherArray.push(newWeather);
+    }
+    // dataInside.forEach(value =>{
+    //     let newWeather = new Weather(value);
+    //     let newTime = new Date(newWeather.time).toString().split(' ');
+    //     let createTime = `${newTime[0]} ${newTime[1]} ${newTime[2]} ${newTime[3]}`;
+    //     newWeather.time = createTime;
+    //     weatherArray.push(newWeather);
+    // })
     response.status(200).json(weatherArray);
   } catch (error){
     errorHandler(error,request,response);   
@@ -48,7 +54,7 @@ function notFoundHandler(request,response){
     response.status(404).send('Error 404: URL Not found.')
 }
 function errorHandler (error,request,response){
-    response.status(500).send(error);
+    response.status(500).send('SORRY AN ERROR OCCURED'+error);
 }
 function Location(city,geoData){
     this.search_query = city;
