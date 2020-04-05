@@ -25,12 +25,15 @@ app.get('/weather',(request,response)=>{
     let dataInside = weatherData.data;
     let weatherArray = [];
     let city = request.query.city;
-
-    // weatherData.data.forEach(value =>{
-    //     new Weather(value);
-    // })
+    dataInside.forEach(value =>{
+        let newWeather = new Weather(value);
+        let newTime = new Date(newWeather.time).toString().split(' ');
+        let createTime = `${newTime[0]} ${newTime[1]} ${newTime[2]} ${newTime[3]}`;
+        newWeather.time = createTime;
+        weatherArray.push(newWeather);
+    })
     console.log(weatherArray)
-    response.status(200).json(dataInside);
+    response.status(200).json(weatherArray);
   } catch (error){
     errorHandler(error,request,response);   
   }
@@ -56,7 +59,6 @@ function Location(city,geoData){
 function Weather(data){
     this.forecast = data.weather.description;
     this.time = data.datetime;
-    weatherArray.push(this);
 }
 
 
